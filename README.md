@@ -59,4 +59,4 @@ This phase involves the complete implementation of the LMS system, covering:
 - **Mohab**: Implemented Assessment and Grading Features.
 - **Team Member 4**: Developed Notifications and Email Features.
 - **Fathi**: Worked on Performance Tracking and Analytics.
-- **Team Member 6**: Handled Backend Integration and Security Features.
+- **Ibrahim Mohamed**: Handled Backend Integration and Security Features.
