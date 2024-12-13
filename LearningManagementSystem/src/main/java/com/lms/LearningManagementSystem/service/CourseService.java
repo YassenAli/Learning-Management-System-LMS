@@ -2,6 +2,7 @@ package com.lms.LearningManagementSystem.service;
 
 import com.lms.LearningManagementSystem.model.Course;
 import com.lms.LearningManagementSystem.model.Lesson;
+import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.repository.CourseRepository;
 import com.lms.LearningManagementSystem.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +38,13 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public Course enrollInCourse(Long courseId, String studentName) {
+    public Course enrollInCourse(Long courseId, User student) {
         Course course = getCourseById(courseId).orElseThrow(() -> new RuntimeException("Course not found"));
-        course.getEnrolledStudents().add(studentName);
+        course.getEnrolledStudents().add(student);
         return courseRepository.save(course);
     }
 
-    public List<String> getEnrolledStudents(Long courseId) {
+    public List<User> getEnrolledStudents(Long courseId) {
         Course course = getCourseById(courseId).orElseThrow(() -> new RuntimeException("Course not found"));
         return course.getEnrolledStudents();
     }
