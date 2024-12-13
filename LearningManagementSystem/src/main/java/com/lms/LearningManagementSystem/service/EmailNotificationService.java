@@ -14,7 +14,7 @@ public class EmailNotificationService {
 
     public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("new42991777@gmail.com");
+        message.setFrom("ziadmohamedali333@gmail.com");
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
