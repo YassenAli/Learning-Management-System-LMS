@@ -17,17 +17,18 @@ public class NotificationService {
         this.emailNotificationService = emailNotificationService;
     }
 
-    public void createNotification(Long userId, String message, String email) {
+    public void createNotification(Long userId, String subject, String message, String email) {
         // Save notification in database
         Notification notification = new Notification();
         notification.setUserId(userId);
+        notification.setSubject(subject);
         notification.setMessage(message);
         notification.setTimestamp(LocalDateTime.now());
         notification.setIsRead(false);
         notificationRepository.save(notification);
 
         // Send email notification
-        emailNotificationService.sendEmail(email, "New Notification", message);
+        emailNotificationService.sendEmail(email, subject, message);
     }
 
     public List<Notification> getUnreadNotifications(Long userId) {
@@ -38,9 +39,13 @@ public class NotificationService {
         return notificationRepository.findByUserId(userId);
     }
 
-    public void markAsRead(Long notificationId) {
-        Notification notification = notificationRepository.findById(notificationId).orElseThrow();
-        notification.setIsRead(true);
-        notificationRepository.save(notification);
+    public boolean markAsRead(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId).orElse(null);
+        if (notification != null) {
+            notification.setIsRead(true);
+            notificationRepository.save(notification);
+            return true;  // Successfully marked as read
+        }
+        return false;  // Notification not found
     }
 }
