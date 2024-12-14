@@ -3,6 +3,7 @@ package com.lms.LearningManagementSystem.service;
 import com.lms.LearningManagementSystem.model.Course;
 import com.lms.LearningManagementSystem.model.Lesson;
 import com.lms.LearningManagementSystem.model.User;
+import com.lms.LearningManagementSystem.service.UserService;
 import com.lms.LearningManagementSystem.repository.CourseRepository;
 import com.lms.LearningManagementSystem.repository.LessonRepository;
 import com.lms.LearningManagementSystem.repository.UserRepository;
@@ -25,9 +26,13 @@ public class CourseService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     @PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
     public Course createCourse(Course course) {
+
+        // Get the instructor from the database
         User instructor = userRepository.findByUsername(course.getInstructor().getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Instructor not found"));
         course.setInstructor(instructor);
@@ -38,12 +43,12 @@ public class CourseService {
     public Course updateCourse(Long courseId, Course course) {
         Course existingCourse = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found"));
-        
+
         // Preserve the original instructor
         course.setId(courseId);
         course.setInstructor(existingCourse.getInstructor());
         course.setEnrolledStudents(existingCourse.getEnrolledStudents());
-        
+
         return courseRepository.save(course);
     }
 
@@ -80,24 +85,24 @@ public class CourseService {
     public void enrollStudent(Long courseId, String username) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found"));
-        
+
         if (course.getEnrolledStudents().contains(username)) {
             throw new IllegalArgumentException("Student is already enrolled in this course");
         }
-        
+
         course.getEnrolledStudents().add(username);
         courseRepository.save(course);
     }
 
     @PreAuthorize("hasRole('STUDENT')")
-    public void unenrollStudent(Long courseId, String username) {
+    public void unEnrollStudent(Long courseId, String username) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found"));
-        
+
         if (!course.getEnrolledStudents().contains(username)) {
             throw new IllegalArgumentException("Student is not enrolled in this course");
         }
-        
+
         course.getEnrolledStudents().remove(username);
         courseRepository.save(course);
     }
@@ -114,16 +119,16 @@ public class CourseService {
     public Lesson generateOtp(Long courseId, Long lessonId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
-        
+
         Lesson lesson = course.getLessons().stream()
                 .filter(l -> l.getId().equals(lessonId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
-        
+
         // Generate a random 6-digit OTP
         String otp = String.format("%06d", (int)(Math.random() * 1000000));
         lesson.setOtp(otp);
-        
+
         courseRepository.save(course);
         return lesson;
     }
@@ -132,12 +137,12 @@ public class CourseService {
     public boolean validateOtp(Long courseId, Long lessonId, String otp) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
-        
+
         Lesson lesson = course.getLessons().stream()
                 .filter(l -> l.getId().equals(lessonId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
-        
+
         return otp.equals(lesson.getOtp());
     }
 
@@ -145,14 +150,6 @@ public class CourseService {
     public List<String> getEnrolledStudents(Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
-        return course.getEnrolledStudents();
-    }
-
-    @PreAuthorize("hasRole('STUDENT')")
-    public Course enrollInCourse(Long courseId, User student) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
-        course.getEnrolledStudents().add(student.getUsername());
-        return courseRepository.save(course);
+        return course.getEnrolledStudents().stream().collect(Collectors.toList());
     }
 }

@@ -3,6 +3,7 @@ package com.lms.LearningManagementSystem.controller;
 import com.lms.LearningManagementSystem.model.Course;
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.CourseService;
+import com.lms.LearningManagementSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,9 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
     public ResponseEntity<List<Course>> getAllCourses() {
         return ResponseEntity.ok(courseService.getAllCourses());
@@ -33,20 +37,19 @@ public class CourseController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<Course> createCourse(@RequestBody Course course, Authentication authentication) {
-        //set the instructor with the current username
+        //pass the instructor's id to the course
         User instructor = new User();
         instructor.setUsername(authentication.getName());
         course.setInstructor(instructor);
-
 
         Course createdCourse = courseService.createCourse(course);
         return ResponseEntity.ok(createdCourse);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #id) or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #id) ")
     public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course course) {
         try {
             Course updatedCourse = courseService.updateCourse(id, course);
@@ -94,7 +97,7 @@ public class CourseController {
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<?> unenrollFromCourse(@PathVariable Long id, Authentication authentication) {
         try {
-            courseService.unenrollStudent(id, authentication.getName());
+            courseService.unEnrollStudent(id, authentication.getName());
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
