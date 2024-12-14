@@ -1,8 +1,7 @@
 package com.lms.LearningManagementSystem.controller;
 
-import com.lms.LearningManagementSystem.model.Course;
-import com.lms.LearningManagementSystem.model.Lesson;
-import com.lms.LearningManagementSystem.service.CourseService;
+import com.lms.LearningManagementSystem.model.Assessment;
+import com.lms.LearningManagementSystem.service.AssessmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
