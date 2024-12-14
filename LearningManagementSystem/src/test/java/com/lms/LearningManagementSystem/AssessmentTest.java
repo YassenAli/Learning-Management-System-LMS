@@ -1,5 +1,6 @@
 package com.lms.LearningManagementSystem;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -9,8 +10,10 @@ import com.lms.LearningManagementSystem.controller.AssessmentController;
 import com.lms.LearningManagementSystem.model.Assignment;
 import com.lms.LearningManagementSystem.model.Course;
 import com.lms.LearningManagementSystem.model.Question;
+import com.lms.LearningManagementSystem.model.Quiz;
 import com.lms.LearningManagementSystem.service.AssignmentService;
 import com.lms.LearningManagementSystem.service.QuestionService;
+import com.lms.LearningManagementSystem.service.QuizService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +35,9 @@ class AssessmentTest {
 
     @Mock
     private QuestionService questionService;
+
+    @Mock
+    private QuizService quizService;
 
     @Mock
     private AssignmentService assignmentService;
@@ -191,4 +197,93 @@ class AssessmentTest {
         verify(assignmentService, times(1)).saveAssignment(any(Assignment.class));
     }
 
+    @Test
+    void addQuiz() throws Exception {
+        Quiz quiz = new Quiz();
+        quiz.setTitle("Java Basics Quiz");
+        quiz.setDescription("A quiz about basic Java concepts.");
+        quiz.setTotalMarks(100l);
+
+        when(quizService.saveQuiz(any(Quiz.class))).thenReturn(quiz);
+
+        mockMvc.perform(post("/api/Assessment/quizzes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(quiz)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Java Basics Quiz"))
+                .andExpect(jsonPath("$.description").value("A quiz about basic Java concepts."))
+                .andExpect(jsonPath("$.totalMarks").value(100));
+
+        verify(quizService, times(1)).saveQuiz(any(Quiz.class));
+    }
+
+    // Test for getting a quiz by ID
+    @Test
+    void getQuizById() throws Exception {
+        Quiz quiz = new Quiz();
+        quiz.setId(1L);
+        quiz.setTitle("Java Basics Quiz");
+        quiz.setDescription("A quiz about basic Java concepts.");
+        quiz.setTotalMarks(100l);
+
+        when(quizService.getQuiz(1L)).thenReturn(quiz);
+
+        mockMvc.perform(get("/api/Assessment/quizzes/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Java Basics Quiz"))
+                .andExpect(jsonPath("$.description").value("A quiz about basic Java concepts."))
+                .andExpect(jsonPath("$.totalMarks").value(100));
+
+        verify(quizService, times(1)).getQuiz(1L);
+    }
+
+    // Test for getting all quizzes
+    @Test
+    void getAllQuizzes() throws Exception {
+        Quiz quiz1 = new Quiz();
+        quiz1.setId(1L);
+        quiz1.setTitle("Java Basics Quiz");
+        quiz1.setDescription("A quiz about basic Java concepts.");
+        quiz1.setTotalMarks(100l);
+
+        Quiz quiz2 = new Quiz();
+        quiz2.setId(2L);
+        quiz2.setTitle("Advanced Java Quiz");
+        quiz2.setDescription("A quiz about advanced Java concepts.");
+        quiz2.setTotalMarks(100l);
+
+        List<Quiz> quizzes = Arrays.asList(quiz1, quiz2);
+        when(quizService.getAllQuizzes()).thenReturn(quizzes);
+
+        mockMvc.perform(get("/api/Assessment/quizzes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[1].id").value(2));
+
+        verify(quizService, times(1)).getAllQuizzes();
+    }
+
+    // Test for updating a quiz
+    @Test
+    void updateQuiz() throws Exception {
+        Quiz quiz = new Quiz();
+        quiz.setId(1L);
+        quiz.setTitle("Updated Java Basics Quiz");
+        quiz.setDescription("An updated quiz about basic Java concepts.");
+        quiz.setTotalMarks(150l);
+
+        when(quizService.updateQuiz(eq(1L), any(Quiz.class))).thenReturn(quiz);
+
+        mockMvc.perform(put("/api/Assessment/quizzes/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(quiz)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Updated Java Basics Quiz"))
+                .andExpect(jsonPath("$.description").value("An updated quiz about basic Java concepts."))
+                .andExpect(jsonPath("$.totalMarks").value(150));
+
+        verify(quizService, times(1)).updateQuiz(eq(1L), any(Quiz.class));
+    }
 }

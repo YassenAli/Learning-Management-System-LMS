@@ -2,6 +2,8 @@ package com.lms.LearningManagementSystem.controller;
 
 import com.lms.LearningManagementSystem.model.Assignment;
 import com.lms.LearningManagementSystem.service.AssignmentService;
+import com.lms.LearningManagementSystem.model.Quiz;
+import com.lms.LearningManagementSystem.service.QuizService;
 import com.lms.LearningManagementSystem.model.Question;
 import com.lms.LearningManagementSystem.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,10 @@ public class AssessmentController {
 
     @Autowired
     private QuestionService questionService;
-
     @Autowired
     private AssignmentService assignmentService;
-
+    @Autowired
+    private QuizService quizService;
     @PostMapping("/questions")
     public Question addQuestion(@RequestBody Question question) {
         return questionService.saveQuestion(question);
@@ -45,5 +47,27 @@ public class AssessmentController {
     public List<Assignment> getAllAssignments() {
         return assignmentService.getAllAssignments();
     }
+
+    @PostMapping("/quizzes")
+    public Quiz addQuiz(@RequestBody Quiz quiz) {
+        return quizService.saveQuiz(quiz);
+    }
+
+    @GetMapping("/quizzes/{id}")
+    public Quiz getQuiz(@PathVariable Long id) {
+        return quizService.getQuiz(id);
+    }
+
+    @GetMapping("/quizzes")
+    public List<Quiz> getAllQuizzes() {
+        return quizService.getAllQuizzes();
+    }
+
+    @PutMapping("/quizzes/{id}")
+    public ResponseEntity<Quiz> updateQuiz(@PathVariable Long id, @RequestBody Quiz updatedQuiz) {
+        Quiz quiz = quizService.updateQuiz(id, updatedQuiz);
+        return ResponseEntity.ok(quiz);
+    }
+
 
 }
