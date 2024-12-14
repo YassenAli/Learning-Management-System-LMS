@@ -32,4 +32,7 @@ public class Course {
 
     @ElementCollection
     private List<String> enrolledStudents = new ArrayList<>(); // List of student names
+
+    @OneToMany(mappedBy = "course")
+    private List<Assignment> assignments;
 }

@@ -1,9 +1,6 @@
 package com.lms.LearningManagementSystem.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +22,8 @@ public class Question {
     @NotBlank
     private String correctAnswer;
 
+
+    @ManyToOne
+    @JoinColumn(name = "assignment_id", nullable = false)  // foreign key column
+    private Assignment assignment;
 }

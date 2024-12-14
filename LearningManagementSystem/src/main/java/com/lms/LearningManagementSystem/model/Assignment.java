@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -28,5 +30,10 @@ public class Assignment {
     @NotBlank
     private String feedback;
 
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)  // foreign key column
+    private Course course;
 
+    @OneToMany(mappedBy = "question")
+    private List<Question> question;
 }
