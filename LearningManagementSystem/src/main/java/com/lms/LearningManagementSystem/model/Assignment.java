@@ -34,6 +34,6 @@ public class Assignment {
     @JoinColumn(name = "course_id", nullable = false)  // foreign key column
     private Course course;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> question;
 }
