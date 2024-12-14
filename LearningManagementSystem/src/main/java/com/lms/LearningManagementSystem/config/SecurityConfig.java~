@@ -24,16 +24,16 @@ public class SecurityConfig {
     private CustomUserDetailsService customUserDetailsService;
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(customUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
@@ -45,14 +45,31 @@ public class SecurityConfig {
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
             )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
+                .requestMatchers(
+                    "/api/auth/**",
+                    "/h2-console/**"
+                ).permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/instructor/**").hasRole("INSTRUCTOR")
                 .requestMatchers("/api/student/**").hasRole("STUDENT")
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form.disable())
-            .httpBasic(basic -> basic.disable());
+            .formLogin(form -> form
+                .loginProcessingUrl("/api/auth/login")
+                .successHandler((request, response, authentication) -> {
+                    response.setStatus(200);
+                })
+                .failureHandler((request, response, exception) -> {
+                    response.setStatus(401);
+                })
+            )
+            .logout(logout -> logout
+                .logoutUrl("/api/auth/logout")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(200);
+                })
+            )
+            .authenticationProvider(authenticationProvider());
 
         return http.build();
     }
