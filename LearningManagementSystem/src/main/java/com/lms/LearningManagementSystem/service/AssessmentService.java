@@ -1,9 +1,7 @@
 package com.lms.LearningManagementSystem.service;
 
-import com.lms.LearningManagementSystem.model.Course;
-import com.lms.LearningManagementSystem.model.Lesson;
-import com.lms.LearningManagementSystem.repository.CourseRepository;
-import com.lms.LearningManagementSystem.repository.LessonRepository;
+import com.lms.LearningManagementSystem.model.Assessment;
+import com.lms.LearningManagementSystem.repository.AssessmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
