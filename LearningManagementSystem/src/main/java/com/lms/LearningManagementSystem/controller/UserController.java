@@ -4,46 +4,68 @@ import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    // Get all users
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // Get user by ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return ResponseEntity.of(userService.getUserById(id));
+        return userService.getUserById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Create a new user
-    @PostMapping
-    public User createUser(@Validated @RequestBody User user) {
-        return userService.createUser(user);
+    @PutMapping("/{username}")
+    @PreAuthorize("#username == authentication.principal.username or hasRole('ADMIN')")
+    public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User user) {
+        try {
+            userService.updateUser(username, user);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    // Update user role
-    @PutMapping("/{id}/role")
-    public ResponseEntity<User> updateUserRole(@PathVariable Long id, @RequestParam String role) {
-        return ResponseEntity.ok(userService.updateUserRole(id, role));
-    }
-
-    // Delete user
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<User> getCurrentUserProfile(Authentication authentication) {
+        return ResponseEntity.ok(userService.findByUsername(authentication.getName()));
+    }
+
+    @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateUserRole(@PathVariable Long id, @RequestParam String role) {
+        try {
+            User updatedUser = userService.updateUserRole(id, role);
+            return ResponseEntity.ok(updatedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

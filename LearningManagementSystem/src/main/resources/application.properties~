@@ -64,18 +64,3 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 #management.endpoints.web.exposure.include=*
 # Security
 logging.level.org.springframework.security=DEBUG
-# ------------------------------
-# SECURITY CONFIGURATION (for H2 access)
-# ------------------------------
-# Temporarily disable security for the H2 console in development
-spring.h2.console.settings.web-allow-others=true
-spring.security.user.name=admin
-spring.security.user.password=admin
-
-# ------------------------------
-# H2 DATABASE INITIALIZATION (Optional - for setup)
-# ------------------------------
-# You can set up data initialization script if needed:
-# spring.datasource.initialization-mode=always
-# spring.datasource.schema=classpath:/db/schema.sql
-# spring.datasource.data=classpath:/db/data.sql

@@ -1,4 +1,3 @@
-// Course.java
 package com.lms.LearningManagementSystem.model;
 
 import jakarta.persistence.*;
@@ -31,15 +30,10 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lesson> lessons = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "enrolledCourses")
-    private List<User> students = new ArrayList<>(); // List of users enrolled as students
+    @ElementCollection
+    private List<String> enrolledStudents = new ArrayList<>(); // List of student names
 
     @ManyToOne
-    @JoinColumn(name = "instructor_id") // The instructor who owns this course
+    @JoinColumn(name = "instructor_id") // Foreign key to User
     private User instructor;
-
-    // Add the getEnrolledStudents method
-    public List<User> getEnrolledStudents() {
-        return students;
-    }
 }

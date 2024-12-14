@@ -4,49 +4,63 @@ import com.lms.LearningManagementSystem.model.Enrollment;
 import com.lms.LearningManagementSystem.service.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/enrollments")
+@RequestMapping("/api/enrollments")
+@CrossOrigin(origins = "*")
 public class EnrollmentController {
 
     @Autowired
     private EnrollmentService enrollmentService;
 
-    // Get all enrollments
     @GetMapping
-    public List<Enrollment> getAllEnrollments() {
-        return enrollmentService.getAllEnrollments();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Enrollment>> getAllEnrollments() {
+        return ResponseEntity.ok(enrollmentService.getAllEnrollments());
     }
 
-    // Get enrollments for a specific student
     @GetMapping("/student/{studentId}")
-    public ResponseEntity<List<Enrollment>> getEnrollmentsByStudent(@PathVariable Long studentId) {
+    @PreAuthorize("hasRole('STUDENT') and #studentId == authentication.principal.id or " +
+                  "hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfAnyEnrolledCourse(authentication.principal.username, #studentId) or " +
+                  "hasRole('ADMIN')")
+    public ResponseEntity<List<Enrollment>> getEnrollmentsByStudentId(@PathVariable Long studentId) {
         return ResponseEntity.ok(enrollmentService.getEnrollmentsByStudentId(studentId));
     }
 
-    // Get enrollments for a specific course
     @GetMapping("/course/{courseId}")
-    public ResponseEntity<List<Enrollment>> getEnrollmentsByCourse(@PathVariable Long courseId) {
+    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId) or " +
+                  "hasRole('ADMIN')")
+    public ResponseEntity<List<Enrollment>> getEnrollmentsByCourseId(@PathVariable Long courseId) {
         return ResponseEntity.ok(enrollmentService.getEnrollmentsByCourseId(courseId));
     }
 
-    // Enroll a student in a course
-    @PostMapping
-    public ResponseEntity<Enrollment> enrollStudentInCourse(
-            @RequestParam Long studentId,
-            @RequestParam Long courseId) {
-        return ResponseEntity.ok(enrollmentService.enrollStudentInCourse(studentId, courseId));
+    @PostMapping("/enroll")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<?> enrollStudentInCourse(Authentication authentication, @RequestParam Long courseId) {
+        try {
+            Long studentId = Long.parseLong(authentication.getName());
+            Enrollment enrollment = enrollmentService.enrollStudentInCourse(studentId, courseId);
+            return ResponseEntity.ok(enrollment);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    // Unenroll a student from a course
-    @DeleteMapping
-    public ResponseEntity<Void> unenrollStudent(
-            @RequestParam Long studentId,
-            @RequestParam Long courseId) {
-        enrollmentService.unenrollStudent(studentId, courseId);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/unenroll")
+    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId) or " +
+                  "hasRole('ADMIN')")
+    public ResponseEntity<?> unenrollStudent(@RequestParam Long studentId, @RequestParam Long courseId) {
+        try {
+            enrollmentService.unenrollStudent(studentId, courseId);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
