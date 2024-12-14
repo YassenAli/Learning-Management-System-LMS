@@ -1,92 +1,166 @@
-// Test Cases
 package com.lms.LearningManagementSystem;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lms.LearningManagementSystem.controller.AssessmentController;
+import com.lms.LearningManagementSystem.model.Assignment;
+import com.lms.LearningManagementSystem.model.Question;
+import com.lms.LearningManagementSystem.service.AssignmentService;
+import com.lms.LearningManagementSystem.service.QuestionService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.MediaType;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class AssessmentModuleApplicationTests {
+@ExtendWith(MockitoExtension.class)
+class AssessmentTest {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    @LocalServerPort
-    private int port;
-    @Autowired
+    @InjectMocks
+    private AssessmentController assessmentController;
+
+    @Mock
     private QuestionService questionService;
-    @Autowired
+
+    @Mock
     private AssignmentService assignmentService;
 
-    private String getBaseUrl() {
-        return "http://localhost:" + port + "/api";
+    private MockMvc mockMvc;
+
+    private ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(assessmentController).build();
+        objectMapper = new ObjectMapper();
     }
 
+    // Test for adding a question
     @Test
-    void testAddQuestion() {
+    void addQuestion() throws Exception {
         Question question = new Question();
         question.setText("What is Java?");
-        question.setOptions("A. Language, B. Island, C. Coffee");
+        question.setOptions("A. Language, B. Platform, C. Library, D. None");
         question.setCorrectAnswer("A");
 
-        ResponseEntity<Question> response = restTemplate.postForEntity(getBaseUrl() + "/questions", question, Question.class);
-        assertNotNull(response.getBody());
-        assertEquals("What is Java?", response.getBody().getText());
+        when(questionService.saveQuestion(any(Question.class))).thenReturn(question);
+
+        mockMvc.perform(post("/api/Assessment/questions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(question)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.text").value("What is Java?"))
+                .andExpect(jsonPath("$.options").value("A. Language, B. Platform, C. Library, D. None"))
+                .andExpect(jsonPath("$.correctAnswer").value("A"));
+
+        verify(questionService, times(1)).saveQuestion(any(Question.class));
     }
 
+    // Test for getting a random question
     @Test
-    void testRandomQuestion() {
+    void getRandomQuestion() throws Exception {
         Question question = new Question();
-        question.setText("What is Spring Boot?");
-        question.setOptions("A. Framework, B. Tool");
+        question.setText("What is Java?");
+        question.setOptions("A. Language, B. Platform, C. Library, D. None");
         question.setCorrectAnswer("A");
-        questionService.saveQuestion(question);
 
-        Question randomQuestion = restTemplate.getForObject(getBaseUrl() + "/questions/random", Question.class);
-        assertNotNull(randomQuestion);
+        when(questionService.getRandomQuestion()).thenReturn(question);
+
+        mockMvc.perform(get("/api/Assessment/questions/random"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.text").value("What is Java?"))
+                .andExpect(jsonPath("$.options").value("A. Language, B. Platform, C. Library, D. None"))
+                .andExpect(jsonPath("$.correctAnswer").value("A"));
+
+        verify(questionService, times(1)).getRandomQuestion();
     }
 
+    // Test for submitting an assignment
     @Test
-    void testSubmitAssignment() {
+    void submitAssignment() throws Exception {
         Assignment assignment = new Assignment();
-        assignment.setTitle("Math Assignment");
+        assignment.setTitle("Assignment 1");
         assignment.setStudentName("John Doe");
-        assignment.setContent("Solve 10 equations");
+        assignment.setContent("Content of the assignment.");
+        assignment.setFeedback("Great work!");
+        assignment.setGrade(90.0);
 
-        ResponseEntity<Assignment> response = restTemplate.postForEntity(getBaseUrl() + "/assignments", assignment, Assignment.class);
-        assertNotNull(response.getBody());
-        assertEquals("Math Assignment", response.getBody().getTitle());
+        when(assignmentService.saveAssignment(any(Assignment.class))).thenReturn(assignment);
+
+        mockMvc.perform(post("/api/Assessment/assignments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(assignment)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Assignment 1"))
+                .andExpect(jsonPath("$.studentName").value("John Doe"))
+                .andExpect(jsonPath("$.content").value("Content of the assignment."))
+                .andExpect(jsonPath("$.grade").value(90.0))
+                .andExpect(jsonPath("$.feedback").value("Great work!"));
+
+        verify(assignmentService, times(1)).saveAssignment(any(Assignment.class));
     }
 
+    // Test for grading an assignment
     @Test
-    void testGradeAssignment() {
+    void gradeAssignment() throws Exception {
         Assignment assignment = new Assignment();
-        assignment.setTitle("Math Assignment");
+        assignment.setId(1L);
+        assignment.setTitle("Assignment 1");
         assignment.setStudentName("John Doe");
-        assignment.setContent("Solve 10 equations");
-        assignment = assignmentService.saveAssignment(assignment);
+        assignment.setContent("Content of the assignment.");
+        assignment.setFeedback("Good job!");
+        assignment.setGrade(95.0);
 
-        restTemplate.postForEntity(getBaseUrl() + "/assignments/" + assignment.getId() + "/grade?grade=90&feedback=Good work", null, Assignment.class);
-        Assignment gradedAssignment = assignmentService.gradeAssignment(assignment.getId(), 90.0, "Good work");
+        when(assignmentService.gradeAssignment(eq(1L), anyDouble(), anyString())).thenReturn(assignment);
 
-        assertEquals(90, gradedAssignment.getGrade());
-        assertEquals("Good work", gradedAssignment.getFeedback());
+        mockMvc.perform(post("/api/Assessment/assignments/1/grade")
+                        .param("grade", "95.0")
+                        .param("feedback", "Good job!"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.grade").value(95.0))
+                .andExpect(jsonPath("$.feedback").value("Good job!"));
+
+        verify(assignmentService, times(1)).gradeAssignment(eq(1L), anyDouble(), anyString());
     }
 
+    // Test for getting all assignments
     @Test
-    void testGetAllAssignments() {
-        Assignment assignment = new Assignment();
-        assignment.setTitle("Math Assignment");
-        assignment.setStudentName("John Doe");
-        assignment.setContent("Solve 10 equations");
-        assignmentService.saveAssignment(assignment);
+    void getAllAssignments() throws Exception {
+        Assignment assignment1 = new Assignment();
+        assignment1.setId(1L);
+        assignment1.setTitle("Assignment 1");
+        assignment1.setStudentName("John Doe");
+        assignment1.setContent("Content 1");
+        assignment1.setGrade(90.0);
+        assignment1.setFeedback("Well done");
 
-        Assignment[] assignments = restTemplate.getForObject(getBaseUrl() + "/assignments", Assignment[].class);
-        assertNotNull(assignments);
-        assertTrue(assignments.length > 0);
+        Assignment assignment2 = new Assignment();
+        assignment2.setId(2L);
+        assignment2.setTitle("Assignment 2");
+        assignment2.setStudentName("Jane Doe");
+        assignment2.setContent("Content 2");
+        assignment2.setGrade(85.0);
+        assignment2.setFeedback("Needs improvement");
+
+        List<Assignment> assignments = Arrays.asList(assignment1, assignment2);
+        when(assignmentService.getAllAssignments()).thenReturn(assignments);
+
+        mockMvc.perform(get("/api/Assessment/assignments"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[1].id").value(2));
+
+        verify(assignmentService, times(1)).getAllAssignments();
     }
 }

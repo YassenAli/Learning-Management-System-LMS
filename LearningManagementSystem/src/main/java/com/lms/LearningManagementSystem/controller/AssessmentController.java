@@ -1,7 +1,9 @@
 package com.lms.LearningManagementSystem.controller;
 
-import com.lms.LearningManagementSystem.model.Assessment;
-import com.lms.LearningManagementSystem.service.AssessmentService;
+import com.lms.LearningManagementSystem.model.Assignment;
+import com.lms.LearningManagementSystem.service.AssignmentService;
+import com.lms.LearningManagementSystem.model.Question;
+import com.lms.LearningManagementSystem.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,8 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/Assessment")
-
-class AssessmentController {
+public class AssessmentController {
 
     @Autowired
     private QuestionService questionService;

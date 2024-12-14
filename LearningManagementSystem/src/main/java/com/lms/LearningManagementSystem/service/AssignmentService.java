@@ -1,33 +1,20 @@
 package com.lms.LearningManagementSystem.service;
 
-import com.lms.LearningManagementSystem.model.Assessment;
-import com.lms.LearningManagementSystem.repository.AssessmentRepository;
+import com.lms.LearningManagementSystem.model.Assignment;
+import com.lms.LearningManagementSystem.model.Question;
+import com.lms.LearningManagementSystem.repository.AssignmentRepository;
+import com.lms.LearningManagementSystem.model.Course;
+import com.lms.LearningManagementSystem.repository.CourseRepository;
+import com.lms.LearningManagementSystem.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
-class QuestionService {
-
-    @Autowired
-    private QuestionRepository questionRepository;
-
-    public Question saveQuestion(Question question) {
-        return questionRepository.save(question);
-    }
-
-    public Question getRandomQuestion() {
-        List<Question> questions = questionRepository.findAll();
-        if (questions.isEmpty()) throw new RuntimeException("No questions available");
-        Random random = new Random();
-        return questions.get(random.nextInt(questions.size()));
-    }
-}
-
-@Service
-class AssignmentService {
+public class AssignmentService {
 
     @Autowired
     private AssignmentRepository assignmentRepository;
