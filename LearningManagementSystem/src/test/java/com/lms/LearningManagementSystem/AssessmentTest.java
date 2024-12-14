@@ -70,7 +70,7 @@ class AssessmentTest {
     @Test
     void getRandomQuestion() throws Exception {
         Question question = new Question();
-        question.setText("What is Java?");
+        question.setText("What is C++?");
         question.setOptions("A. Language, B. Platform, C. Library, D. None");
         question.setCorrectAnswer("A");
 
@@ -78,7 +78,7 @@ class AssessmentTest {
 
         mockMvc.perform(get("/api/Assessment/questions/random"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text").value("What is Java?"))
+                .andExpect(jsonPath("$.text").value("What is C++?"))
                 .andExpect(jsonPath("$.options").value("A. Language, B. Platform, C. Library, D. None"))
                 .andExpect(jsonPath("$.correctAnswer").value("A"));
 
@@ -90,8 +90,8 @@ class AssessmentTest {
     void submitAssignment() throws Exception {
         Assignment assignment = new Assignment();
         assignment.setTitle("Assignment 1");
-        assignment.setStudentName("John Doe");
-        assignment.setContent("Content of the assignment.");
+        assignment.setStudentName("Muhammad Fathi");
+        assignment.setContent("Any Content");
         assignment.setFeedback("Great work!");
         assignment.setGrade(90.0);
 
@@ -102,8 +102,8 @@ class AssessmentTest {
                         .content(objectMapper.writeValueAsString(assignment)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Assignment 1"))
-                .andExpect(jsonPath("$.studentName").value("John Doe"))
-                .andExpect(jsonPath("$.content").value("Content of the assignment."))
+                .andExpect(jsonPath("$.studentName").value("Muhammad Fathi"))
+                .andExpect(jsonPath("$.content").value("Any Content"))
                 .andExpect(jsonPath("$.grade").value(90.0))
                 .andExpect(jsonPath("$.feedback").value("Great work!"));
 
@@ -116,8 +116,8 @@ class AssessmentTest {
         Assignment assignment = new Assignment();
         assignment.setId(1L);
         assignment.setTitle("Assignment 1");
-        assignment.setStudentName("John Doe");
-        assignment.setContent("Content of the assignment.");
+        assignment.setStudentName("Muhammad Fathi");
+        assignment.setContent("Any Content");
         assignment.setFeedback("Good job!");
         assignment.setGrade(95.0);
 
@@ -140,7 +140,7 @@ class AssessmentTest {
         Assignment assignment1 = new Assignment();
         assignment1.setId(1L);
         assignment1.setTitle("Assignment 1");
-        assignment1.setStudentName("John Doe");
+        assignment1.setStudentName("Muhammad Fathi");
         assignment1.setContent("Content 1");
         assignment1.setGrade(90.0);
         assignment1.setFeedback("Well done");
@@ -148,7 +148,7 @@ class AssessmentTest {
         Assignment assignment2 = new Assignment();
         assignment2.setId(2L);
         assignment2.setTitle("Assignment 2");
-        assignment2.setStudentName("Jane Doe");
+        assignment2.setStudentName("Abdo Ali");
         assignment2.setContent("Content 2");
         assignment2.setGrade(85.0);
         assignment2.setFeedback("Needs improvement");
