@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lms.LearningManagementSystem.controller.AssessmentController;
 import com.lms.LearningManagementSystem.model.Assignment;
+import com.lms.LearningManagementSystem.model.Course;
 import com.lms.LearningManagementSystem.model.Question;
 import com.lms.LearningManagementSystem.service.AssignmentService;
 import com.lms.LearningManagementSystem.service.QuestionService;
@@ -163,4 +164,31 @@ class AssessmentTest {
 
         verify(assignmentService, times(1)).getAllAssignments();
     }
+
+    @Test
+    void submitAssignmentWithCourse() throws Exception {
+
+        Course course = new Course();
+        course.setTitle("English Course");
+        course.setDescription("Description of English Course");
+
+        Assignment assignment = new Assignment();
+        assignment.setTitle("Assignment 1");
+        assignment.setStudentName("Mohamed Ahmed");
+        assignment.setContent("Content of the assignment.");
+        assignment.setFeedback("Great work!");
+        assignment.setGrade(90.0);
+        assignment.setCourse(course);
+
+        when(assignmentService.saveAssignment(any(Assignment.class))).thenReturn(assignment);
+
+        mockMvc.perform(post("/api/Assessment/assignments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(assignment)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.course.title").value("English Course"));
+
+        verify(assignmentService, times(1)).saveAssignment(any(Assignment.class));
+    }
+
 }
