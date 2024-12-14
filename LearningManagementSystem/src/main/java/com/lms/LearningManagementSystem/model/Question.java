@@ -24,6 +24,6 @@ public class Question {
 
 
     @ManyToOne
-    @JoinColumn(name = "assignment_id", nullable = false)  // foreign key column
-    private Assignment assignment;
+    @JoinColumn(name = "course_id", nullable = false)  // foreign key column
+    private Course course;
 }
