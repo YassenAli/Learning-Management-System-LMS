@@ -97,7 +97,7 @@ public class CourseController {
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<?> unenrollFromCourse(@PathVariable Long id, Authentication authentication) {
         try {
-            courseService.unEnrollStudent(id, authentication.getName());
+            courseService.unenrollStudent(id, authentication.getName());
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
