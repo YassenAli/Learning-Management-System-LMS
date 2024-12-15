@@ -95,7 +95,7 @@ public class CourseService {
     }
 
     @PreAuthorize("hasRole('STUDENT')")
-    public void unEnrollStudent(Long courseId, String username) {
+    public void unenrollStudent(Long courseId, String username) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found"));
 
