@@ -40,4 +40,10 @@ public class Course {
     @JoinColumn(name = "instructor_id") // Foreign key to User
     @JsonIgnoreProperties({"coursesTaught", "enrolledCourses", "notifications", "password"})
     private User instructor;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Assignment> assignments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> question;
 }
