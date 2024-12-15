@@ -1,6 +1,7 @@
 package com.lms.LearningManagementSystem.service;
 
 import com.lms.LearningManagementSystem.model.Notification;
+import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.repository.NotificationRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,10 @@ public class NotificationService {
         this.emailNotificationService = emailNotificationService;
     }
 
-    public void createNotification(Long userId, String subject, String message, String email) {
+    public void createNotification(User user, String subject, String message, String email) {
         // Save notification in database
         Notification notification = new Notification();
-        notification.setUserId(userId);
+        notification.setUser(user);
         notification.setSubject(subject);
         notification.setMessage(message);
         notification.setTimestamp(LocalDateTime.now());

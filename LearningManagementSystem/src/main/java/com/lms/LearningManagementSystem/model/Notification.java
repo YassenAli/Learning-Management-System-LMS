@@ -1,9 +1,6 @@
 package com.lms.LearningManagementSystem.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,9 +13,13 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String subject;
     private String message;
     private LocalDateTime timestamp;
     private Boolean isRead;
-    private long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id") // Updated to associate with the User entity
+    private User user;
 }
