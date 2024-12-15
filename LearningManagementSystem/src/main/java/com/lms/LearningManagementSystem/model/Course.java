@@ -32,4 +32,11 @@ public class Course {
 
     @ElementCollection
     private List<String> enrolledStudents = new ArrayList<>(); // List of student names
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Assignment> assignments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> question;
+
 }
