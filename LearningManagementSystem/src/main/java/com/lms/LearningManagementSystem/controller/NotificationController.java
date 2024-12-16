@@ -2,7 +2,9 @@ package com.lms.LearningManagementSystem.controller;
 
 import com.lms.LearningManagementSystem.dto.NotificationRequest;
 import com.lms.LearningManagementSystem.model.Notification;
+import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.NotificationService;
+import com.lms.LearningManagementSystem.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,16 +14,24 @@ import java.util.List;
 @RequestMapping("/notifications")
 public class NotificationController {
     private final NotificationService notificationService;
+    private final UserService userService;
 
-    public NotificationController(NotificationService notificationService) {
+    public NotificationController(NotificationService notificationService, UserService userService) {
         this.notificationService = notificationService;
+        this.userService = userService;
     }
 
     @PostMapping("/create")
     public ResponseEntity<String> createNotification(@RequestBody NotificationRequest notificationRequest) {
-        notificationService.createNotification(notificationRequest.getUser(), notificationRequest.getSubject(), notificationRequest.getMessage());
+        User user = userService.findById(notificationRequest.getUserId());
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found.");
+        }
+
+        notificationService.createNotification(user, notificationRequest.getSubject(), notificationRequest.getMessage());
         return ResponseEntity.ok("Notification created successfully.");
     }
+
 
     @GetMapping("/unread/{userId}")
     public ResponseEntity<List<Notification>> getUnreadNotifications(@PathVariable Long userId) {
