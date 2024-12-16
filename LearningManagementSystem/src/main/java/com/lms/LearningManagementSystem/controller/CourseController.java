@@ -1,6 +1,7 @@
 package com.lms.LearningManagementSystem.controller;
 
 import com.lms.LearningManagementSystem.model.Course;
+import com.lms.LearningManagementSystem.model.Lesson;
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.CourseService;
 import com.lms.LearningManagementSystem.service.UserService;
@@ -103,4 +104,43 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/{courseId}/media")
+    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId)")
+    public ResponseEntity<Course> uploadMediaFiles(@PathVariable Long courseId, @RequestBody List<String> mediaFiles) {
+        return ResponseEntity.ok(courseService.uploadMediaFiles(courseId, mediaFiles));
+    }
+
+    // Generate OTP for a lesson
+    @PostMapping("/{courseId}/lessons/{lessonId}/generate-otp")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ResponseEntity<Lesson> generateOtp(@PathVariable Long courseId, @PathVariable Long lessonId) {
+        return ResponseEntity.ok(courseService.generateOtp(courseId, lessonId));
+    }
+
+    // Validate OTP for attendance
+    @PostMapping("/{courseId}/lessons/{lessonId}/validate-otp")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<Boolean> validateOtp(@PathVariable Long courseId, @PathVariable Long lessonId, @RequestBody String otp) {
+        return ResponseEntity.ok(courseService.validateOtp(courseId, lessonId, otp));
+    }
+
+    @GetMapping("/{courseId}/students")
+    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #id) or hasRole('ADMIN')")
+    public ResponseEntity<List<String>> getEnrolledStudents(@PathVariable Long courseId) {
+        return ResponseEntity.ok(courseService.getEnrolledStudents(courseId));
+    }
+
+//    @PostMapping("/{courseId}/addstudents")
+//    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId)")
+//    public ResponseEntity<Course> addStudentsToCourse(@PathVariable Long courseId, @RequestBody List<String> studentUsernames) {
+//        return ResponseEntity.ok(courseService.addStudentsToCourse(courseId, studentUsernames));
+//    }
+
+    @PostMapping("/{courseId}/lessons")
+    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId)")
+    public ResponseEntity<Course> addLessonsToCourse(@PathVariable Long courseId, @RequestBody List<Lesson> lessons) {
+        return ResponseEntity.ok(courseService.addLessonsToCourse(courseId, lessons));
+    }
+
 }
