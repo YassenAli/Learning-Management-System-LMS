@@ -19,6 +19,7 @@ public class Assignment {
     @NotBlank
     private String title;
 
+    @NotBlank
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)  // foreign key column
     private User student;
