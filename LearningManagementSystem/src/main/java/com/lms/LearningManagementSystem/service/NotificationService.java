@@ -18,7 +18,7 @@ public class NotificationService {
         this.emailNotificationService = emailNotificationService;
     }
 
-    public void createNotification(User user, String subject, String message, String email) {
+    public void createNotification(User user, String subject, String message) {
         // Save notification in database
         Notification notification = new Notification();
         notification.setUser(user);
@@ -29,7 +29,7 @@ public class NotificationService {
         notificationRepository.save(notification);
 
         // Send email notification
-        emailNotificationService.sendEmail(email, subject, message);
+        emailNotificationService.sendEmail(user.getEmail(), subject, message);
     }
 
     public List<Notification> getUnreadNotifications(Long userId) {
