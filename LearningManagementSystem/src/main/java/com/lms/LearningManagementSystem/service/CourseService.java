@@ -28,6 +28,8 @@ public class CourseService {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private  NotificationService notificationService;
 
     @PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
     public Course createCourse(Course course) {
@@ -48,7 +50,11 @@ public class CourseService {
         course.setId(courseId);
         course.setInstructor(existingCourse.getInstructor());
         course.setEnrolledStudents(existingCourse.getEnrolledStudents());
-
+        String subject = "Course Update";
+        String message = "Course has been updated";
+        for (String studentName : course.getEnrolledStudents()) {
+            notificationService.createNotification(userService.findByUsername(studentName), subject, message);
+        }
         return courseRepository.save(course);
     }
 

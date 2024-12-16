@@ -4,6 +4,7 @@ import com.lms.LearningManagementSystem.model.Enrollment;
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.repository.CourseRepository;
 import com.lms.LearningManagementSystem.repository.EnrollmentRepository;
+import com.lms.LearningManagementSystem.repository.NotificationRepository;
 import com.lms.LearningManagementSystem.repository.UserRepository;
 import com.lms.LearningManagementSystem.model.Course;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class EnrollmentService {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     // Admin can view all enrollments
     @PreAuthorize("hasRole('ADMIN')")
@@ -62,7 +66,19 @@ public class EnrollmentService {
         enrollment.setStudent(student);
         enrollment.setCourse(course);
 
-        return enrollmentRepository.save(enrollment);
+        Enrollment savedEnrollment = enrollmentRepository.save(enrollment);
+
+        String subject = "Course Enrollment";
+        // Send notification to the student (enrollment confirmation)
+        String studentMessage = "You have been successfully enrolled in the course: " + course.getTitle();
+
+        notificationService.createNotification(student, subject, studentMessage);
+
+        // Send notification to the instructor
+        User instructor = course.getInstructor();
+        String instructorMessage = "New student " + student.getUsername() + " has enrolled in your course: " + course.getTitle();
+        notificationService.createNotification(instructor,subject, instructorMessage);
+        return savedEnrollment;
     }
 
     // Instructors can remove students from their courses, admin can remove from any course
