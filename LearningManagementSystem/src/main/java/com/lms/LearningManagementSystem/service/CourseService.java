@@ -158,4 +158,30 @@ public class CourseService {
                 .orElseThrow(() -> new RuntimeException("Course not found"));
         return course.getEnrolledStudents().stream().collect(Collectors.toList());
     }
+
+//    public Course addStudentsToCourse(Long courseId, List<String> studentUsernames) {
+//        Course course = courseRepository.findById(courseId)
+//                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
+//
+//        // Add students to the course
+//        course.getEnrolledStudents().addAll(studentUsernames);
+//
+//        // Save the updated course
+//        return courseRepository.save(course);
+//    }
+
+    public Course addLessonsToCourse(Long courseId, List<Lesson> lessons) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
+
+        // Set the course reference for each lesson and save the lessons
+        lessons.forEach(lesson -> {
+            lesson.setCourse(course);
+            lessonRepository.save(lesson);
+        });
+
+        // Refresh the course with the updated lessons
+        course.getLessons().addAll(lessons);
+        return courseRepository.save(course);
+    }
 }
