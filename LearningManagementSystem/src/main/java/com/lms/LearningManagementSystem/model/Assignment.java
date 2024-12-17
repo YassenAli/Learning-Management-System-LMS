@@ -35,4 +35,5 @@ public class Assignment {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)  // foreign key column
     private Course course;
+
 }
