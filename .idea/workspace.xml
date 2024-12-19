@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a279ed74-ef59-4736-94c6-0e0d5f579f78" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/test/java/com/lms/LearningManagementSystem/AssessmentTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/test/java/com/lms/LearningManagementSystem/AssessmentTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/lmsdb.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/lmsdb.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/lmsdb.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/lmsdb.trace.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/AuthController$LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/AuthController$LoginRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/CourseController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/CourseController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/NotificationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/NotificationController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/dto/NotificationRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/dto/NotificationRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/model/Assignment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/model/Assignment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/AssignmentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/AssignmentService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/CourseService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/CourseService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/EnrollmentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/EnrollmentService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/NotificationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/NotificationService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/lms/LearningManagementSystem/AssessmentTest.class" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2q7oEmj85MfSrWLnrN4NYJTq8if" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.LearningManagementSystemApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;RBAC&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="LearningManagementSystemApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="Learning-Management-System-LMS" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.lms.LearningManagementSystem.LearningManagementSystemApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a279ed74-ef59-4736-94c6-0e0d5f579f78" name="Changes" comment="" />
+      <created>1734022867467</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1734022867467</updated>
+      <workItem from="1734022870283" duration="2030000" />
+      <workItem from="1734091353324" duration="581000" />
+      <workItem from="1734091951998" duration="321000" />
+      <workItem from="1734092288419" duration="499000" />
+      <workItem from="1734092803812" duration="1655000" />
+      <workItem from="1734121945560" duration="8323000" />
+      <workItem from="1734181585804" duration="6456000" />
+      <workItem from="1734190359048" duration="10527000" />
+      <workItem from="1734202370194" duration="7388000" />
+      <workItem from="1734288000926" duration="2158000" />
+      <workItem from="1734301442336" duration="1400000" />
+      <workItem from="1734369345570" duration="2708000" />
+      <workItem from="1734432809192" duration="2448000" />
+      <workItem from="1734457476023" duration="1221000" />
+      <workItem from="1734459044946" duration="4993000" />
+      <workItem from="1734638972224" duration="8403000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
