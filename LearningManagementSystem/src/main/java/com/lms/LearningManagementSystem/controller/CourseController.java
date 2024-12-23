@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -79,21 +80,30 @@ public class CourseController {
 
     @GetMapping("/instructor")
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ResponseEntity<List<Course>> getInstructorCourses(User authentication) {
-        return ResponseEntity.ok(courseService.getCoursesByInstructor(authentication.getUsername()));
+    public ResponseEntity<List<Course>> getInstructorCourses(Principal principal) {
+        String username = principal.getName();
+        return ResponseEntity.ok(courseService.getCoursesByInstructor(username));
     }
 
+//    @GetMapping("/enrolled")
+//    @PreAuthorize("hasRole('STUDENT')")
+//    public ResponseEntity<List<Course>> getEnrolledCourses(User authentication) {
+//        return ResponseEntity.ok(courseService.getEnrolledCourses(authentication.getUsername()));
+//    }
     @GetMapping("/enrolled")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<List<Course>> getEnrolledCourses(User authentication) {
-        return ResponseEntity.ok(courseService.getEnrolledCourses(authentication.getUsername()));
+    public List<Course> getEnrolledCourses(Principal principal) {
+        String username = principal.getName();
+        return courseService.getEnrolledCourses(username);
     }
+
 
     @PostMapping("/{id}/enroll")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<?> enrollInCourse(@PathVariable Long id, User authentication) {
+    public ResponseEntity<?> enrollInCourse(@PathVariable Long id, Principal principal) {
         try {
-            courseService.enrollStudent(id, authentication.getUsername());
+            String username = principal.getName();
+            courseService.enrollStudent(id, username);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -102,9 +112,10 @@ public class CourseController {
 
     @PostMapping("/{id}/unenroll")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<?> unenrollFromCourse(@PathVariable Long id, User authentication) {
+    public ResponseEntity<?> unenrollFromCourse(@PathVariable Long id, Principal principal) {
         try {
-            courseService.unenrollStudent(id, authentication.getUsername());
+            String username = principal.getName();
+            courseService.unenrollStudent(id, username);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

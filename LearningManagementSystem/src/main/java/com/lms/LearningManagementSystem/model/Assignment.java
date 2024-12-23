@@ -36,4 +36,7 @@ public class Assignment {
     @JoinColumn(name = "course_id", nullable = false)  // foreign key column
     private Course course;
 
+    public void setStudentName(String muhammadFathi) {
+        student.setUsername(muhammadFathi);
+    }
 }

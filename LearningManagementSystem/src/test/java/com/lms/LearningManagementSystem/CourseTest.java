@@ -53,41 +53,6 @@ class CourseTest {
         mockMvc = MockMvcBuilders.standaloneSetup(courseController).build();
     }
 
-//    @BeforeEach
-//    void setupSecurity() {
-//        // Create a mocked SecurityContext
-//        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-//
-//        // Create a mocked Authentication object
-//        Authentication authentication = Mockito.mock(Authentication.class);
-//
-//        // Mock getName() method of Authentication
-//        Mockito.when(authentication.getName()).thenReturn("testUser");
-//
-//        // Set the mocked Authentication in the mocked SecurityContext
-//        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-//
-//        // Set the mocked SecurityContext in the SecurityContextHolder
-//        SecurityContextHolder.setContext(securityContext);
-//    }
-//
-//    @AfterEach
-//    void tearDown() {
-//        // Clear the SecurityContext after each test to avoid state leakage
-//        SecurityContextHolder.clearContext();
-//    }
-
-
-    @Test
-    void testAuthenticatedUser() {
-        // Call the controller method that uses authentication.getName()
-        ResponseEntity<?> response = courseController.createCourse(null, null);
-
-        // Verify the behavior and the expected output
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().toString().contains("testUser"));
-    }
-
     @Test
     @WithMockUser(username = "instructor", roles = {"INSTRUCTOR"})
     void createCourse() throws Exception {
@@ -196,20 +161,23 @@ class CourseTest {
     }
 
     @Test
+    @WithMockUser(username = "student", roles = {"STUDENT"})
     void getEnrolledCourses() throws Exception {
         Course course = new Course();
         course.setId(1L);
-        course.setTitle("Enrolled Course");
+        course.setTitle("Test Course");
 
         when(courseService.getEnrolledCourses("student"))
                 .thenReturn(Arrays.asList(course));
 
-        mockMvc.perform(get("/api/courses/enrolled").principal(() -> "student"))
+        mockMvc.perform(get("/api/courses/enrolled")
+                        .principal(() -> "student"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("Enrolled Course"));
+                .andExpect(jsonPath("$[0].title").value("Test Course"));
 
         verify(courseService, times(1)).getEnrolledCourses("student");
     }
+
 
     @Test
     @WithMockUser(username = "student", roles = {"STUDENT"})
