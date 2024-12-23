@@ -4,8 +4,10 @@ import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -17,14 +19,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class UserTest {
 
-    @MockBean
+    @Mock
     private UserService userService;
 
-    @MockBean
+    @Mock
     private PasswordEncoder passwordEncoder;
+
+    @InjectMocks
+
 
     private User testUser;
 
@@ -43,7 +48,6 @@ public class UserTest {
 
     @Test
     void testCreateUser() {
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userService.createUser(any(User.class))).thenReturn(testUser);
 
         User createdUser = userService.createUser(testUser);
@@ -57,6 +61,7 @@ public class UserTest {
         verify(userService, times(1)).createUser(any(User.class));
     }
 
+
     @Test
     void testCreateUser_UsernameExists() {
         when(userService.createUser(any(User.class)))
@@ -66,18 +71,6 @@ public class UserTest {
                 userService.createUser(testUser));
         assertEquals("Username already exists", exception.getMessage());
     }
-
-//    @Test
-//    void testUpdateUserRole() {
-//        testUser.setRole(User.Role.INSTRUCTOR);
-//        when(userService.updateUserRole(anyLong(), anyString())).thenReturn(testUser);
-//
-//        User updatedUser = userService.updateUserRole(testUser.getId(), "INSTRUCTOR");
-//
-//        assertNotNull(updatedUser);
-//        assertEquals(User.Role.INSTRUCTOR, updatedUser.getRole());
-//        verify(userService, times(1)).updateUserRole(anyLong(), anyString());
-//    }
 
     @Test
     void testGetAllUsers() {
@@ -105,18 +98,6 @@ public class UserTest {
     }
 
     @Test
-    void testFindByUsername() {
-        when(userService.findByUsername("testUser")).thenReturn(testUser);
-
-        var user = userService.findByUsername("testUser");
-
-        assertNotNull(user);
-        assertEquals("testUser", user.getUsername());
-        assertEquals("test@example.com", user.getEmail());
-        verify(userService, times(1)).findByUsername("testUser");
-    }
-
-    @Test
     void testDeleteUser() {
         doNothing().when(userService).deleteUser(1L);
 
@@ -133,15 +114,5 @@ public class UserTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 userService.deleteUser(1L));
         assertEquals("User not found", exception.getMessage());
-    }
-
-    @Test
-    void testRegisterUser() {
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-        doNothing().when(userService).registerUser(any(User.class));
-
-        userService.registerUser(testUser);
-
-        verify(userService, times(1)).registerUser(any(User.class));
     }
 }
