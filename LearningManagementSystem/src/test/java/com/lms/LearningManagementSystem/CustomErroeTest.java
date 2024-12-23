@@ -1,51 +1,81 @@
-/*
-package com.lms.LearningManagementSystem.controller;
+package com.lms.LearningManagementSystem;
 
+import com.lms.LearningManagementSystem.controller.CustomErrorController;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@WebMvcTest(CustomErrorController.class)
-public class CustomErrorControllerTest {
+class CustomErrorControllerTest {
 
-    private MockMvc mockMvc;
+    @Mock
+    private HttpServletRequest request;
+
+    @InjectMocks
+    private CustomErrorController customErrorController;
 
     @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext) {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    void setUp() {
+        // Initialize the mocks
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testHandleError_404() throws Exception {
-        // Simulate a 404 error scenario
-        mockMvc.perform(get("/error")
-                        .requestAttr("javax.servlet.error.status_code", 404))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name("error/404"));
+    void testHandleError_404() {
+        // Mock the request to return a 404 status
+        when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE))
+                .thenReturn(HttpStatus.NOT_FOUND.value());
+
+        // Call the method to handle the error
+        String viewName = customErrorController.handleError(request);
+
+        // Verify the result
+        assertEquals("error/404", viewName);
     }
 
     @Test
-    void testHandleError_403() throws Exception {
-        // Simulate a 403 error scenario
-        mockMvc.perform(get("/error")
-                        .requestAttr("javax.servlet.error.status_code", 403))
-                .andExpect(status().isForbidden())
-                .andExpect(view().name("error/403"));
+    void testHandleError_403() {
+        // Mock the request to return a 403 status
+        when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE))
+                .thenReturn(HttpStatus.FORBIDDEN.value());
+
+        // Call the method to handle the error
+        String viewName = customErrorController.handleError(request);
+
+        // Verify the result
+        assertEquals("error/403", viewName);
     }
 
     @Test
-    void testHandleError_GeneralError() throws Exception {
-        // Simulate an unknown error scenario
-        mockMvc.perform(get("/error")
-                        .requestAttr("javax.servlet.error.status_code", 500))
-                .andExpect(status().isInternalServerError())
-                .andExpect(view().name("error/error"));
+    void testHandleError_OtherError() {
+        // Mock the request to return a 500 status
+        when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE))
+                .thenReturn(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        // Call the method to handle the error
+        String viewName = customErrorController.handleError(request);
+
+        // Verify the result
+        assertEquals("error/error", viewName);
+    }
+
+    @Test
+    void testHandleError_NullStatus() {
+        // Mock the request to return null (no status)
+        when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE))
+                .thenReturn(null);
+
+        // Call the method to handle the error
+        String viewName = customErrorController.handleError(request);
+
+        // Verify the result
+        assertEquals("error/error", viewName);
     }
 }
-*/

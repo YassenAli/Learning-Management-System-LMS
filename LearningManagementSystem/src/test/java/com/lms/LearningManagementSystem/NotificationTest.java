@@ -1,161 +1,125 @@
-/*
-package com.lms.LearningManagementSystem.controller;
+package com.lms.LearningManagementSystem;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lms.LearningManagementSystem.dto.NotificationRequest;
+import com.lms.LearningManagementSystem.controller.NotificationController;
 import com.lms.LearningManagementSystem.model.Notification;
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.NotificationService;
-import com.lms.LearningManagementSystem.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(NotificationController.class)
+@ExtendWith(MockitoExtension.class)
 class NotificationControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private NotificationController notificationController;
 
-    @MockBean
+    @Mock
     private NotificationService notificationService;
 
-    @MockBean
-    private UserService userService;
-
-    @Autowired
+    private MockMvc mockMvc;
     private ObjectMapper objectMapper;
-
-    private NotificationRequest notificationRequest;
-    private User testUser;
-    private Notification testNotification;
 
     @BeforeEach
     void setUp() {
-        testUser = new User();
-        testUser.setId(1L);
-        testUser.setUsername("john_doe");
-
-        notificationRequest = new NotificationRequest();
-        notificationRequest.setUserId(1L);
-        notificationRequest.setSubject("Test Notification");
-        notificationRequest.setMessage("This is a test notification.");
-
-        testNotification = new Notification();
-        testNotification.setId(1L);
-        testNotification.setSubject("Test Notification");
-        testNotification.setMessage("This is a test notification.");
-        testNotification.setRead(false);
+        mockMvc = MockMvcBuilders.standaloneSetup(notificationController).build();
+        objectMapper = new ObjectMapper();
     }
 
     @Test
-    void testCreateNotificationSuccess() throws Exception {
-        when(userService.findById(1L)).thenReturn(testUser);
-        doNothing().when(notificationService).createNotification(any(User.class), anyString(), anyString());
+    void createNotification() throws Exception {
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUser");
+        user.setEmail("test@example.com");
+        doNothing().when(notificationService).createNotification(user, anyString(), anyString());
+
+        String requestBody = "{\"user\": {\"id\": 1}, \"subject\": \"Test Subject\", \"message\": \"Test Message\", \"email\": \"test@example.com\"}";
 
         mockMvc.perform(post("/notifications/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(notificationRequest)))
+                        .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Notification created successfully."));
 
-        verify(userService, times(1)).findById(1L);
-        verify(notificationService, times(1)).createNotification(any(User.class), anyString(), anyString());
+        verify(notificationService, times(1)).createNotification(user, eq("Test Subject"), eq("Test Message"));
     }
 
     @Test
-    void testCreateNotificationUserNotFound() throws Exception {
-        when(userService.findById(1L)).thenReturn(null);
+    void getUnreadNotifications() throws Exception {
+        Notification notification1 = new Notification();
+        notification1.setId(1L);
+        notification1.setSubject("Subject 1");
+        notification1.setMessage("Message 1");
+        notification1.setTimestamp(LocalDateTime.now());
+        notification1.setIsRead(false);
 
-        mockMvc.perform(post("/notifications/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(notificationRequest)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("User not found."));
+        Notification notification2 = new Notification();
+        notification2.setId(2L);
+        notification2.setSubject("Subject 2");
+        notification2.setMessage("Message 2");
+        notification2.setTimestamp(LocalDateTime.now());
+        notification2.setIsRead(false);
 
-        verify(userService, times(1)).findById(1L);
-        verify(notificationService, never()).createNotification(any(User.class), anyString(), anyString());
-    }
+        List<Notification> notifications = Arrays.asList(notification1, notification2);
 
-    @Test
-    void testGetUnreadNotificationsSuccess() throws Exception {
-        List<Notification> unreadNotifications = Arrays.asList(testNotification);
-        when(notificationService.getUnreadNotifications(1L)).thenReturn(unreadNotifications);
+        when(notificationService.getUnreadNotifications(1L)).thenReturn(notifications);
 
         mockMvc.perform(get("/notifications/unread/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].subject").value("Test Notification"))
-                .andExpect(jsonPath("$[0].read").value(false));
+                .andExpect(jsonPath("$[1].id").value(2));
 
         verify(notificationService, times(1)).getUnreadNotifications(1L);
     }
 
     @Test
-    void testGetUnreadNotificationsNoContent() throws Exception {
-        when(notificationService.getUnreadNotifications(1L)).thenReturn(List.of());
+    void getAllNotifications() throws Exception {
+        Notification notification = new Notification();
+        notification.setId(1L);
+        notification.setSubject("All Subject");
+        notification.setMessage("All Message");
+        notification.setTimestamp(LocalDateTime.now());
 
-        mockMvc.perform(get("/notifications/unread/1"))
-                .andExpect(status().isNoContent());
+        List<Notification> notifications = List.of(notification);
 
-        verify(notificationService, times(1)).getUnreadNotifications(1L);
-    }
-
-    @Test
-    void testGetAllNotificationsSuccess() throws Exception {
-        List<Notification> allNotifications = Arrays.asList(testNotification);
-        when(notificationService.getAllNotifications(1L)).thenReturn(allNotifications);
+        when(notificationService.getAllNotifications(1L)).thenReturn(notifications);
 
         mockMvc.perform(get("/notifications/all/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].subject").value("Test Notification"));
+                .andExpect(jsonPath("$[0].subject").value("All Subject"));
 
         verify(notificationService, times(1)).getAllNotifications(1L);
     }
 
+    //    error not found 404
     @Test
-    void testGetAllNotificationsNoContent() throws Exception {
-        when(notificationService.getAllNotifications(1L)).thenReturn(List.of());
+    void markAsRead() throws Exception {
+        long notificationId = 1;
 
-        mockMvc.perform(get("/notifications/all/1"))
-                .andExpect(status().isNoContent());
+        // Mock the behavior of the markAsRead method
+        when(notificationService.markAsRead(notificationId)).thenReturn(true);
 
-        verify(notificationService, times(1)).getAllNotifications(1L);
+        mockMvc.perform(post("/notifications/read/{id}", notificationId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
-    @Test
-    void testMarkAsReadSuccess() throws Exception {
-        when(notificationService.markAsRead(1L)).thenReturn(true);
-
-        mockMvc.perform(post("/notifications/read/1"))
-                .andExpect(status().isNoContent());
-
-        verify(notificationService, times(1)).markAsRead(1L);
-    }
-
-    @Test
-    void testMarkAsReadNotFound() throws Exception {
-        when(notificationService.markAsRead(1L)).thenReturn(false);
-
-        mockMvc.perform(post("/notifications/read/1"))
-                .andExpect(status().isNotFound());
-
-        verify(notificationService, times(1)).markAsRead(1L);
-    }
 }
-
-*/
