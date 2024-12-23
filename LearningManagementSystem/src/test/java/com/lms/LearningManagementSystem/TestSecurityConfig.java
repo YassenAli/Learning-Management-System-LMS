@@ -1,22 +1,25 @@
-package java.com.lms.LearningManagementSystem;
+package com.lms.LearningManagementSystem;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.lms.LearningManagementSystem.controller.HomeController;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class HomeControllerTest {
+// assces denied due to security settings but should work fine
+@WebMvcTest(HomeController.class)
+class HomeControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new HomeController()).build();
-    }
 
     @Test
     void testHome() throws Exception {

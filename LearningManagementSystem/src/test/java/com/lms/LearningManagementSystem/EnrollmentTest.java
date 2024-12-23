@@ -1,4 +1,4 @@
-package com.lms.LearningManagementSystem.controller;
+package com.lms.LearningManagementSystem;
 
 import com.lms.LearningManagementSystem.model.Enrollment;
 import com.lms.LearningManagementSystem.service.EnrollmentService;
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,8 +20,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(EnrollmentController.class)
-public class EnrollmentControllerTest {
+@WebMvcTest(Enrollment.class)
+public class EnrollmentTest {
 
     private MockMvc mockMvc;
 
@@ -31,7 +32,7 @@ public class EnrollmentControllerTest {
     private Authentication authentication;
 
     @InjectMocks
-    private EnrollmentController enrollmentController;
+    private Enrollment enrollmentController;
 
     @BeforeEach
     void setUp() {
@@ -134,7 +135,10 @@ public class EnrollmentControllerTest {
     void testUnenrollStudent_BadRequest() throws Exception {
         Long studentId = 1L;
         Long courseId = 1L;
-        when(enrollmentService.unenrollStudent(studentId, courseId)).thenThrow(new IllegalArgumentException("Enrollment not found"));
+
+        // Mock behavior to throw exception
+        doThrow(new IllegalArgumentException("Enrollment not found"))
+                .when(enrollmentService).unenrollStudent(studentId, courseId);
 
         mockMvc.perform(delete("/api/enrollments/unenroll")
                         .param("studentId", String.valueOf(studentId))
@@ -145,5 +149,5 @@ public class EnrollmentControllerTest {
 
         verify(enrollmentService, times(1)).unenrollStudent(studentId, courseId);
     }
-}
 
+}

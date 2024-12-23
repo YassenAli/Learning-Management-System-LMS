@@ -7,10 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lms.LearningManagementSystem.controller.AssessmentController;
-import com.lms.LearningManagementSystem.model.Assignment;
-import com.lms.LearningManagementSystem.model.Course;
-import com.lms.LearningManagementSystem.model.Question;
-import com.lms.LearningManagementSystem.model.Quiz;
+import com.lms.LearningManagementSystem.model.*;
 import com.lms.LearningManagementSystem.service.AssignmentService;
 import com.lms.LearningManagementSystem.service.QuestionService;
 import com.lms.LearningManagementSystem.service.QuizService;
@@ -95,9 +92,11 @@ class AssessmentTest {
     // Test for submitting an assignment
     @Test
     void submitAssignment() throws Exception {
+        User user1 = new User();
+        user1.setUsername("Muhammad Fathi");
         Assignment assignment = new Assignment();
         assignment.setTitle("Assignment 1");
-        assignment.setStudentName("Muhammad Fathi");
+        assignment.setStudent(user1);
         assignment.setContent("Any Content");
         assignment.setFeedback("Great work!");
         assignment.setGrade(90.0);
@@ -109,7 +108,6 @@ class AssessmentTest {
                         .content(objectMapper.writeValueAsString(assignment)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Assignment 1"))
-                .andExpect(jsonPath("$.studentName").value("Muhammad Fathi"))
                 .andExpect(jsonPath("$.content").value("Any Content"))
                 .andExpect(jsonPath("$.grade").value(90.0))
                 .andExpect(jsonPath("$.feedback").value("Great work!"));
@@ -120,10 +118,12 @@ class AssessmentTest {
     // Test for grading an assignment
     @Test
     void gradeAssignment() throws Exception {
+        User user1 = new User();
+        user1.setUsername("Muhammad Fathi");
         Assignment assignment = new Assignment();
         assignment.setId(1L);
         assignment.setTitle("Assignment 1");
-        assignment.setStudentName("Muhammad Fathi");
+        assignment.setStudent(user1);
         assignment.setContent("Any Content");
         assignment.setFeedback("Good job!");
         assignment.setGrade(95.0);
@@ -144,10 +144,14 @@ class AssessmentTest {
     // Test for getting all assignments
     @Test
     void getAllAssignments() throws Exception {
+        User user1 = new User();
+        user1.setUsername("Muhammad Fathi");
+        User user2 = new User();
+        user2.setUsername("Abdo Ali");
         Assignment assignment1 = new Assignment();
         assignment1.setId(1L);
         assignment1.setTitle("Assignment 1");
-        assignment1.setStudentName("Muhammad Fathi");
+        assignment1.setStudent(user1);
         assignment1.setContent("Content 1");
         assignment1.setGrade(90.0);
         assignment1.setFeedback("Well done");
@@ -155,7 +159,7 @@ class AssessmentTest {
         Assignment assignment2 = new Assignment();
         assignment2.setId(2L);
         assignment2.setTitle("Assignment 2");
-        assignment2.setStudentName("Abdo Ali");
+        assignment2.setStudent(user2);
         assignment2.setContent("Content 2");
         assignment2.setGrade(85.0);
         assignment2.setFeedback("Needs improvement");
@@ -174,13 +178,15 @@ class AssessmentTest {
     @Test
     void submitAssignmentWithCourse() throws Exception {
 
+        User user = new User();
+        user.setUsername("Mohamed Ahmed");
         Course course = new Course();
         course.setTitle("English Course");
         course.setDescription("Description of English Course");
 
         Assignment assignment = new Assignment();
         assignment.setTitle("Assignment 1");
-        assignment.setStudentName("Mohamed Ahmed");
+        assignment.setStudent(user);
         assignment.setContent("Content of the assignment.");
         assignment.setFeedback("Great work!");
         assignment.setGrade(90.0);
