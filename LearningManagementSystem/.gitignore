@@ -5,6 +5,8 @@ target/
 !**/src/test/**/target/
 
 .idea/
+data
+MediaStorage
 
 ### STS ###
 .apt_generated

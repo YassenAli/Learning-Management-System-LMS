@@ -8,9 +8,16 @@ import com.lms.LearningManagementSystem.repository.CourseRepository;
 import com.lms.LearningManagementSystem.repository.LessonRepository;
 import com.lms.LearningManagementSystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,8 +37,10 @@ public class CourseService {
     private UserService userService;
     @Autowired
     private  NotificationService notificationService;
+    @Value("${media.storage.path}") // Define a property in application.properties
+    private String mediaStoragePath;
 
-    @PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId) or hasRole('ADMIN')")
     public Course createCourse(Course course) {
 
         // Get the instructor from the database
@@ -113,12 +122,30 @@ public class CourseService {
         courseRepository.save(course);
     }
 
-    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId)")
-    public Course uploadMediaFiles(Long courseId, List<String> mediaFiles) {
+    public Course uploadMediaFiles(Long courseId, List<MultipartFile> files) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found"));
-        course.getMediaFiles().addAll(mediaFiles);
+
+        List<String> filePaths = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String filePath = saveFile(file);
+            filePaths.add(filePath);
+        }
+
+        course.getMediaFiles().addAll(filePaths);
         return courseRepository.save(course);
+    }
+
+    private String saveFile(MultipartFile file) {
+        try {
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = Paths.get(mediaStoragePath, fileName);
+            Files.createDirectories(filePath.getParent()); // Ensure directory exists
+            Files.write(filePath, file.getBytes());
+            return filePath.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
+        }
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId)")
