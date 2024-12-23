@@ -171,4 +171,5 @@ public class CourseController {
     public ResponseEntity<Course> addLessonsToCourse(@PathVariable Long courseId, @RequestBody List<Lesson> lessons) {
         return ResponseEntity.ok(courseService.addLessonsToCourse(courseId, lessons));
     }
+
 }
