@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
+import java.util.Map;
 
 import java.util.List;
 import java.util.Optional;
@@ -97,5 +99,30 @@ public class UserService {
 
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    @PreAuthorize("#username == authentication.principal.username or hasRole('ADMIN')")
+    public User updateUserDetails(Long id, Map<String, Object> updates){
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        for (String key : updates.keySet()) {
+            switch (key) {
+                case "username":
+                    user.setUsername((String) updates.get(key));
+                    break;
+                case "email":
+                    user.setEmail((String) updates.get(key));
+                    break;
+                case "password":
+                    user.setPassword(passwordEncoder.encode((String) updates.get(key)));
+                    break;
+                case "role":
+                    // role is enumerated type
+                    user.setRole(Role.valueOf((String) updates.get(key)));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid field: " + key);
+            }
+        }
+        return userRepository.save(user);
     }
 }
