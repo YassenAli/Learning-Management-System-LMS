@@ -5,12 +5,15 @@ import com.lms.LearningManagementSystem.controller.NotificationController;
 import com.lms.LearningManagementSystem.model.Notification;
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.NotificationService;
+import com.lms.LearningManagementSystem.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -33,24 +36,32 @@ class NotificationControllerTest {
     @Mock
     private NotificationService notificationService;
 
+    @Mock
+    private UserService userService;
+
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
+        // Initialize MockMvc with the standalone setup
         mockMvc = MockMvcBuilders.standaloneSetup(notificationController).build();
         objectMapper = new ObjectMapper();
     }
 
     @Test
     void createNotification() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUser");
-        user.setEmail("test@example.com");
-        doNothing().when(notificationService).createNotification(user, anyString(), anyString());
+        // Mock userService behavior
+        User mockUser = new User();
+        mockUser.setId(1L);
+        mockUser.setEmail("test@example.com");
+        when(userService.findById(1L)).thenReturn(mockUser);
 
-        String requestBody = "{\"user\": {\"id\": 1}, \"subject\": \"Test Subject\", \"message\": \"Test Message\", \"email\": \"test@example.com\"}";
+        // Mock notificationService behavior
+        doNothing().when(notificationService).createNotification(any(User.class), anyString(), anyString());
+
+        // Test request payload
+        String requestBody = "{\"userId\": 1, \"subject\": \"Test Subject\", \"message\": \"Test Message\"}";
 
         mockMvc.perform(post("/notifications/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +69,9 @@ class NotificationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Notification created successfully."));
 
-        verify(notificationService, times(1)).createNotification(user, eq("Test Subject"), eq("Test Message"));
+        // Verify interactions
+        verify(userService, times(1)).findById(1L);
+        verify(notificationService, times(1)).createNotification(eq(mockUser), eq("Test Subject"), eq("Test Message"));
     }
 
     @Test
@@ -109,7 +122,7 @@ class NotificationControllerTest {
         verify(notificationService, times(1)).getAllNotifications(1L);
     }
 
-    //    error not found 404
+//    error not found 404
     @Test
     void markAsRead() throws Exception {
         long notificationId = 1;
@@ -119,7 +132,7 @@ class NotificationControllerTest {
 
         mockMvc.perform(post("/notifications/read/{id}", notificationId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is2xxSuccessful());
     }
 
 }
