@@ -5,13 +5,20 @@ import com.lms.LearningManagementSystem.model.Lesson;
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.CourseService;
 import com.lms.LearningManagementSystem.service.UserService;
+import org.apache.tomcat.util.file.ConfigurationSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -38,11 +45,10 @@ public class CourseController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ResponseEntity<Course> createCourse(@RequestBody Course course, Authentication authentication) {
+    @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #id) ")
+    public ResponseEntity<Course> createCourse(@RequestBody Course course, User instructor) {
         //pass the instructor's id to the course
-        User instructor = new User();
-        instructor.setUsername(authentication.getName());
+        instructor.setUsername(instructor.getUsername());
         course.setInstructor(instructor);
 
         Course createdCourse = courseService.createCourse(course);
@@ -73,21 +79,21 @@ public class CourseController {
 
     @GetMapping("/instructor")
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ResponseEntity<List<Course>> getInstructorCourses(Authentication authentication) {
-        return ResponseEntity.ok(courseService.getCoursesByInstructor(authentication.getName()));
+    public ResponseEntity<List<Course>> getInstructorCourses(User authentication) {
+        return ResponseEntity.ok(courseService.getCoursesByInstructor(authentication.getUsername()));
     }
 
     @GetMapping("/enrolled")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<List<Course>> getEnrolledCourses(Authentication authentication) {
-        return ResponseEntity.ok(courseService.getEnrolledCourses(authentication.getName()));
+    public ResponseEntity<List<Course>> getEnrolledCourses(User authentication) {
+        return ResponseEntity.ok(courseService.getEnrolledCourses(authentication.getUsername()));
     }
 
     @PostMapping("/{id}/enroll")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<?> enrollInCourse(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<?> enrollInCourse(@PathVariable Long id, User authentication) {
         try {
-            courseService.enrollStudent(id, authentication.getName());
+            courseService.enrollStudent(id, authentication.getUsername());
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -96,9 +102,9 @@ public class CourseController {
 
     @PostMapping("/{id}/unenroll")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<?> unenrollFromCourse(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<?> unenrollFromCourse(@PathVariable Long id, User authentication) {
         try {
-            courseService.unenrollStudent(id, authentication.getName());
+            courseService.unenrollStudent(id, authentication.getUsername());
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -107,8 +113,20 @@ public class CourseController {
 
     @PostMapping("/{courseId}/media")
     @PreAuthorize("hasRole('INSTRUCTOR') and @courseSecurityService.isInstructorOfCourse(authentication.principal.username, #courseId)")
-    public ResponseEntity<Course> uploadMediaFiles(@PathVariable Long courseId, @RequestBody List<String> mediaFiles) {
-        return ResponseEntity.ok(courseService.uploadMediaFiles(courseId, mediaFiles));
+    public ResponseEntity<Course> uploadMediaFiles(
+            @PathVariable Long courseId,
+            @RequestParam("files") List<MultipartFile> files) {
+        return ResponseEntity.ok(courseService.uploadMediaFiles(courseId, files));
+    }
+
+    @GetMapping("/media/{fileName}")
+    public ResponseEntity<Resource> serveMediaFile(@PathVariable String fileName) {
+        Path filePath = Paths.get("/MediaStorage", fileName);
+        Resource resource = new FileSystemResource(filePath);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .body(resource);
     }
 
     // Generate OTP for a lesson

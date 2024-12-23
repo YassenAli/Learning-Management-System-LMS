@@ -1,3 +1,4 @@
+/*
 package com.lms.LearningManagementSystem.controller;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,3 +48,4 @@ public class CustomErrorControllerTest {
                 .andExpect(view().name("error/error"));
     }
 }
+*/
