@@ -5,6 +5,7 @@ import com.lms.LearningManagementSystem.model.Notification;
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.NotificationService;
 import com.lms.LearningManagementSystem.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/notifications")
 public class NotificationController {
+    @Autowired
     private final NotificationService notificationService;
+
+    @Autowired
     private final UserService userService;
 
     public NotificationController(NotificationService notificationService, UserService userService) {
