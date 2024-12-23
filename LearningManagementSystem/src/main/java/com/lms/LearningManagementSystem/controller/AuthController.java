@@ -3,6 +3,8 @@ package com.lms.LearningManagementSystem.controller;
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
+        System.out.println("Register endpoint accessed: " + user.getUsername());
         try {
             User registeredUser = userService.createUser(user);
             registeredUser.setPassword(null);
@@ -48,12 +51,12 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest, HttpSession session) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUsername(),
-                    loginRequest.getPassword()
-                )
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsername(),
+                            loginRequest.getPassword()
+                    )
             );
-            
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
@@ -61,7 +64,7 @@ public class AuthController {
             response.put("message", "User logged in successfully");
             response.put("username", loginRequest.getUsername());
             response.put("role", authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", ""));
-            
+
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             Map<String, String> response = new HashMap<>();
@@ -83,24 +86,11 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @Setter
+    @Getter
     public static class LoginRequest {
         private String username;
         private String password;
 
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
     }
 }
