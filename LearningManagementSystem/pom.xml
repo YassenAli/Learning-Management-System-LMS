@@ -49,6 +49,19 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<artifactId>unlogged-sdk</artifactId>
+			<groupId>video.bug</groupId>
+			<version>0.6.9</version>
+		</dependency>
+
 		<!-- MySQL Database Driver -->
 		<dependency>
 			<groupId>com.mysql</groupId>
