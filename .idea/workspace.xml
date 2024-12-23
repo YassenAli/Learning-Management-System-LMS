@@ -5,26 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a279ed74-ef59-4736-94c6-0e0d5f579f78" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/test/java/com/lms/LearningManagementSystem/AssessmentTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/test/java/com/lms/LearningManagementSystem/AssessmentTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/lmsdb.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/lmsdb.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/lmsdb.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/lmsdb.trace.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/config/SecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/AuthController$LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/AuthController$LoginRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/AuthController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/CourseController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/CourseController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/NotificationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/NotificationController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/controller/UserController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/dto/NotificationRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/dto/NotificationRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/model/Assignment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/model/Assignment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/AssignmentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/AssignmentService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/CourseService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/CourseService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/EnrollmentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/EnrollmentService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/NotificationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/NotificationService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/lms/LearningManagementSystem/service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/lms/LearningManagementSystem/AssessmentTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_13_2024_2_03_PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_13_2024_2_03_PM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/PerformanceAnalyticsChartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/PerformanceAnalyticsChartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/PerformanceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/controller/PerformanceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/service/PerformanceAnalyticsChartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/service/PerformanceAnalyticsChartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/service/PerformanceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/main/java/com/lms/LearningManagementSystem/service/PerformanceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/test/java/com/lms/LearningManagementSystem/AuthTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/test/java/com/lms/LearningManagementSystem/AuthTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LearningManagementSystem/src/test/java/com/lms/LearningManagementSystem/UserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LearningManagementSystem/src/test/java/com/lms/LearningManagementSystem/UserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,36 +33,120 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-    "associatedIndex": 0
-  }]]></component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+    &quot;associatedIndex&quot;: 0
+  }</component>
   <component name="ProjectId" id="2q7oEmj85MfSrWLnrN4NYJTq8if" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
-  </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
-    "keyToString": {
-      "JUnit.AssessmentTest.executor": "Run",
-      "RunOnceActivity.OpenProjectViewOnStart": "true",
-      "RunOnceActivity.ShowReadmeOnStart": "true",
-      "git-widget-placeholder": "main",
-      "ignore.virus.scanning.warn.message": "true",
-      "kotlin-language-version-configured": "true",
-      "node.js.detected.package.eslint": "true",
-      "node.js.detected.package.tslint": "true",
-      "node.js.selected.package.eslint": "(autodetect)",
-      "node.js.selected.package.tslint": "(autodetect)",
-      "nodejs_package_manager_path": "npm",
-      "vue.rearranger.settings.migration": "true"
-    }
-  }]]></component>
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.AssessmentTest.executor": "Run",
+    "JUnit.UserTest.executor": "Run",
+    "JUnit.UserTest.testCreateUser.executor": "Run",
+    "JUnit.UserTest.testGetAllUsers.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "RBAC",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="JUnit.UserTest">
+    <configuration name="UserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Learning-Management-System-LMS" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lms.LearningManagementSystem.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.lms.LearningManagementSystem" />
+      <option name="MAIN_CLASS_NAME" value="com.lms.LearningManagementSystem.UserTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserTest.testCreateUser" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Learning-Management-System-LMS" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lms.LearningManagementSystem.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.lms.LearningManagementSystem" />
+      <option name="MAIN_CLASS_NAME" value="com.lms.LearningManagementSystem.UserTest" />
+      <option name="METHOD_NAME" value="testCreateUser" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserTest.testGetAllUsers" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Learning-Management-System-LMS" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lms.LearningManagementSystem.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.lms.LearningManagementSystem" />
+      <option name="MAIN_CLASS_NAME" value="com.lms.LearningManagementSystem.UserTest" />
+      <option name="METHOD_NAME" value="testGetAllUsers" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LearningManagementSystemApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="Learning-Management-System-LMS" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.lms.LearningManagementSystem.LearningManagementSystemApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.UserTest" />
+        <item itemvalue="JUnit.UserTest.testCreateUser" />
+        <item itemvalue="JUnit.UserTest.testGetAllUsers" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -96,6 +171,7 @@
       <workItem from="1734457476023" duration="1221000" />
       <workItem from="1734459044946" duration="4993000" />
       <workItem from="1734638972224" duration="8403000" />
+      <workItem from="1734973191324" duration="2835000" />
     </task>
     <servers />
   </component>
