@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LearningManagementSystem.iml" filepath="$PROJECT_DIR$/LearningManagementSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Learning-Management-System-LMS.iml" filepath="$PROJECT_DIR$/.idea/Learning-Management-System-LMS.iml" />
     </modules>
   </component>
 </project>
