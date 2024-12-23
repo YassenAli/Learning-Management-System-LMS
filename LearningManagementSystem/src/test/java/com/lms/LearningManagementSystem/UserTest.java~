@@ -2,12 +2,13 @@ package com.lms.LearningManagementSystem;
 
 import com.lms.LearningManagementSystem.model.User;
 import com.lms.LearningManagementSystem.service.UserService;
+import com.lms.LearningManagementSystem.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -15,21 +16,22 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class UserTest {
 
-    @Mock
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private EntityManager entityManager;
+
+    @Autowired
     private UserService userService;
 
-    @Mock
+    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @InjectMocks
-
 
     private User testUser;
 
@@ -48,6 +50,7 @@ public class UserTest {
 
     @Test
     void testCreateUser() {
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userService.createUser(any(User.class))).thenReturn(testUser);
 
         User createdUser = userService.createUser(testUser);
@@ -61,6 +64,40 @@ public class UserTest {
         verify(userService, times(1)).createUser(any(User.class));
     }
 
+    @Test
+    @Transactional
+    void testUpdateUserInfo() {
+        userRepository.save(testUser);
+
+        testUser.setFirstName("Updated");
+        userRepository.save(testUser);
+
+        entityManager.flush();
+
+        User updatedUser = userRepository.findById(testUser.getId()).orElseThrow();
+        assertEquals("Updated", updatedUser.getFirstName());
+    }
+
+    @Test
+    void testGetAllUsers() {
+        userRepository.save(testUser);
+        var users = userService.getAllUsers();
+        assertNotNull(users);
+        assertEquals(1, users.size());
+        assertEquals("testUser", users.get(0).getUsername());
+        assertEquals("test@example.com", users.get(0).getEmail());
+        verify(userService, times(1)).getAllUsers();
+    }
+
+    @Test
+    void testDeleteUser() {
+        userRepository.save(testUser);
+        doNothing().when(userService).deleteUser(testUser.getId());
+
+        userService.deleteUser(testUser.getId());
+
+        verify(userService, times(1)).deleteUser(testUser.getId());
+    }
 
     @Test
     void testCreateUser_UsernameExists() {
@@ -73,16 +110,13 @@ public class UserTest {
     }
 
     @Test
-    void testGetAllUsers() {
-        when(userService.getAllUsers()).thenReturn(Arrays.asList(testUser));
+    void testRegisterUser() {
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        doNothing().when(userService).registerUser(any(User.class));
 
-        var users = userService.getAllUsers();
+        userService.registerUser(testUser);
 
-        assertNotNull(users);
-        assertEquals(1, users.size());
-        assertEquals("testUser", users.get(0).getUsername());
-        assertEquals("test@example.com", users.get(0).getEmail());
-        verify(userService, times(1)).getAllUsers();
+        verify(userService, times(1)).registerUser(any(User.class));
     }
 
     @Test
@@ -98,12 +132,15 @@ public class UserTest {
     }
 
     @Test
-    void testDeleteUser() {
-        doNothing().when(userService).deleteUser(1L);
+    void testFindByUsername() {
+        when(userService.findByUsername("testUser")).thenReturn(testUser);
 
-        userService.deleteUser(1L);
+        var user = userService.findByUsername("testUser");
 
-        verify(userService, times(1)).deleteUser(1L);
+        assertNotNull(user);
+        assertEquals("testUser", user.getUsername());
+        assertEquals("test@example.com", user.getEmail());
+        verify(userService, times(1)).findByUsername("testUser");
     }
 
     @Test
